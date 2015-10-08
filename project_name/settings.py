@@ -13,20 +13,9 @@ https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '{{ secret_key }}'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -50,7 +39,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'project_name.urls'
+ROOT_URLCONF = '{{ project_name }}.urls'
 
 TEMPLATES = [
     {
@@ -68,17 +57,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'project_name.wsgi.application'
+WSGI_APPLICATION = '{{ project_name }}.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(default='postgres:///{{ project_name }}'),
 }
 
 
@@ -99,4 +85,77 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/{{ docs_version }}/howto/static-files/
 
+PUBLIC_ROOT = os.environ.get('PUBLIC_ROOT', os.path.join(BASE_DIR, 'public'))
+
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(PUBLIC_ROOT, 'static')
+
+MEDIA_ROOT = os.path.join(PUBLIC_ROOT, 'media')
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+# Security settings
+
+SECRET_KEY = os.environ['SECRET_KEY']
+
+DEBUG = os.environ.get('DEBUG', 'on') == 'on'
+
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(';')
+
+INTERNAL_IPS = ('127.0.0.1', )
+
+X_FRAME_OPTIONS = 'DENY'
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+SECURE_BROWSER_XSS_FILTER = True
+
+SSL_ENABLED = os.environ.get('SSL', 'off') == 'on'
+
+SECURE_SSL_REDIRECT = SSL_ENABLED
+
+SECURE_HSTS_SECONDS = 60 * 60 * 24 * 365 if SSL_ENABLED else 0
+
+SESSION_COOKIE_SECURE = SSL_ENABLED
+
+SESSION_COOKIE_HTTPONLY = True
+
+CSRF_COOKIE_SECURE = SSL_ENABLED
+
+CSRF_COOKIE_HTTPONLY = True
+
+# Logging settings
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            'format': '[%(asctime)s: %(levelname)s/%(name)s] - %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+        }
+    },
+    'root': {
+        'level': 'INFO',
+        'handlers': ['console', ]
+    },
+    'loggers': {
+        'django': {
+            'propagate': True,
+        },
+    }
+}
+
+# Systems checks
+
+SILENCED_SYSTEM_CHECKS = [
+    # Not enabling HSTS for all subdomains
+    'security.W005'
+]
