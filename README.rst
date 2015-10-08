@@ -51,7 +51,8 @@ and checking code quality. Below is a brief description of the commands
 
 - ``make test`` - Runs the full test suite and reports test coverage
 - ``make lint`` - Runs a set of subcommands to check code quality
-  - ``make lint-py`` - Runs the code through ``flake8`` for static analysis
-  - ``make lint-migrations`` - Runs Django's checks for model changes without migrations
-  - ``make lint-django`` - Runs Django's system checks with the base settings
-  - ``make lint-deploy`` - Runs Django's system checks for deployment
+
+ - ``make lint-py`` - Runs the code through ``flake8`` for static analysis
+ - ``make lint-migrations`` - Runs Django's checks for model changes without migrations
+ - ``make lint-django`` - Runs Django's system checks with the base settings
+ - ``make lint-deploy`` - Runs Django's system checks for deployment
