@@ -5,12 +5,9 @@ Below you will find basic setup and deployment instructions for the {{ project_n
 project. To begin you should have the following applications installed on your
 local development system:
 
-- Python >= 3.4
-- `pip <http://www.pip-installer.org/>`_ >= 1.5
-- `virtualenv <http://www.virtualenv.org/>`_ >= 1.10
-- `virtualenvwrapper <http://pypi.python.org/pypi/virtualenvwrapper>`_ >= 3.0
-- Postgres >= 9.3
-- git >= 1.7
+- Python >= 3.6
+- Postgres >= 9.6
+- git
 
 
 Getting Started
@@ -24,9 +21,9 @@ First clone the repository from Github and switch to the new directory::
 To setup your local environment you should create a virtualenv and install the
 necessary requirements::
 
-    # Check that you have python3.4 installed
-    $ which python3.4
-    $ mkvirtualenv {{ project_name }} -p `which python3.4`
+    # Check that you have python3.6 installed
+    $ which python3.6
+    $ mkvirtualenv {{ project_name }} -p `which python3.6`
     ({{ project_name }})$ make dev
 
 Configurable settings are managed with `django-dotenv <https://github.com/jpadilla/django-dotenv>`_.
@@ -51,7 +48,6 @@ and checking code quality. Below is a brief description of the commands
 
 - ``make test`` - Runs the full test suite and reports test coverage
 - ``make lint`` - Runs a set of subcommands to check code quality
-
  - ``make lint-py`` - Runs the code through ``flake8`` for static analysis
  - ``make lint-migrations`` - Runs Django's checks for model changes without migrations
  - ``make lint-django`` - Runs Django's system checks with the base settings
