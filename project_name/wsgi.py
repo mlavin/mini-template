@@ -10,9 +10,7 @@ https://docs.djangoproject.com/en/{{ docs_version }}/howto/deployment/wsgi/
 import os
 
 import dotenv
-
 from django.core.wsgi import get_wsgi_application
-from whitenoise.django import DjangoWhiteNoise
 
 
 env = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
@@ -20,4 +18,4 @@ if os.path.exists(env):
     dotenv.read_dotenv(env)
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', '{{ project_name }}.settings')
 
-application = DjangoWhiteNoise(get_wsgi_application())
+application = get_wsgi_application()
